@@ -47,4 +47,16 @@ public class Order {
     }
 
     // getters in java for grabbing the private fields without modifiying them...
+
+  @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", symbol='" + symbol + '\'' +
+                ", side=" + side +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", status=" + status +
+                '}';
+    }
 }
