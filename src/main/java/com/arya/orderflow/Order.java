@@ -58,5 +58,28 @@ public class Order {
                 ", price=" + price +
                 ", status=" + status +
                 '}';
-    }
+    } // override changes the default tostring method thats derives from the object class
+
+    public void markValidated() {
+        this.status = OrderStatus.VALIDATED;
+    } 
+   
+
+    public void markProcessing() {
+        this.status = OrderStatus.PROCESSING;
+    } 
+   
+
+    public void markFilled() {
+        this.status = OrderStatus.FILLED;
+    } 
+    
+
+    public void markRejected() {
+        this.status = OrderStatus.REJECTED;
+    } 
+
+    // methods for controlling the status of orders.
+
 }
+
