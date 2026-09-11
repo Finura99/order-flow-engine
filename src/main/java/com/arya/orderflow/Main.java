@@ -5,25 +5,20 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Order FLow Engine started");
 
-        Order order = new Order(1, "AAPL", OrderSide.BUY, 100, 100.50);
-        // Create the trading ticket
-
         OrderValidator validator = new OrderValidator();
+        OrderProcessor processor = new OrderProcessor(validator);
 
         Order validOrder = new Order(1, "AAPL", OrderSide.BUY, 100, 190.50);
-        boolean validOrderResult = validator.isValid(validOrder);
-        // Checks if its valid (Defensive programming)
+        Order badOrder = new Order(2, "", OrderSide.BUY, -100, 190.50);
 
-        System.out.println("Valid Order result: " + validOrderResult);
+        processor.process(validOrder);
+        processor.process(badOrder);
 
-        Order badOrder = new Order(1, "", OrderSide.BUY, -100, 190.50);
-        boolean badOrderResult = validator.isValid(badOrder);
-        // Asks if the order is valid
-
-        System.out.println("Bad order result: " + badOrderResult);
-        
+        System.out.println("Valid Order result: " + validOrder.getStatus());
+        System.out.println("Bad order result: " + badOrder.getStatus());        
     }
 }
 
 // For now, main acts as a mini-orchestrator
+
 
