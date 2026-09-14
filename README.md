@@ -11,3 +11,5 @@ At start, i have used enum for OrderSide and OrderStatus instead of plain string
 Main.java is used only as a simple entry point to create and test the objects and the moving parts of the system  before adding Springboot or multithreading.
 
 This is similar to validation in my Python/FastAPI projects, but Java gives me stricter type safety earlier.
+
+14/09/2026 - journal: Fro mwaht i learnt in python, although solid principles isnt the answer, its higly applicable here for loose coupling of the system and will easily grow if we keep things seperate yet connected...
