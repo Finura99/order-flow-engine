@@ -14,8 +14,8 @@ public class Main {
         processor.process(validOrder);
         processor.process(badOrder);
 
-        System.out.println("Valid Order result: " + validOrder.getStatus());
-        System.out.println("Bad order result: " + badOrder.getStatus());        
+        System.out.println(validOrder);
+        System.out.println(badOrder);        
     }
 }
 
