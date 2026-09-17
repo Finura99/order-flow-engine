@@ -10,12 +10,13 @@ public class Main {
 
         Order validOrder = new Order(1, "AAPL", OrderSide.BUY, 100, 190.50);
         Order badOrder = new Order(2, "", OrderSide.BUY, -100, 190.50);
+        // create obj, then 
 
-        processor.process(validOrder);
-        processor.process(badOrder);
+        ProcessingResult validResult = processor.process(validOrder);
+        ProcessingResult badResult = processor.process(badOrder);
 
-        System.out.println(validOrder);
-        System.out.println(badOrder);        
+        System.out.println(validResult);
+        System.out.println(badResult);        
     }
 }
 
