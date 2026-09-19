@@ -16,7 +16,7 @@ public class Main {
         ProcessingResult badResult = processor.process(badOrder);
 
         System.out.println(validResult);
-        System.out.println(badResult);        
+        System.out.println(badResult);
     }
 }
 
