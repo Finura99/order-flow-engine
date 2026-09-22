@@ -1,5 +1,8 @@
 package com.arya.orderflow;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OrderValidator {
 
     // public boolean isValid(Order order) {
@@ -9,23 +12,29 @@ public class OrderValidator {
     // // whole thing here is a method
     // }
 
+    public List<String> getValidationErrors(Order order) {
+        List<String> errors = new ArrayList<>();
+
+        if (order.getQuantity() <= 0) {
+            errors.add("Quantity must be positive");
+        }
+
+        if (order.getSymbol().isBlank()) {
+            errors.add("Symbol must not be blank");
+        }
+
+        if (order.getPrice() <= 0) {
+            errors.add("Price must be positive");
+        }
+        
+        return errors;
+        //validation rules live here
+    }
+
     public boolean isValid(Order order) {
-    if (order.getQuantity() <= 0) {
-        return false;
+        return getValidationErrors(order).isEmpty();
+        //Checks if the lsit contains zero items
     }
-
-    if (order.getSymbol().isBlank()) {
-        return false;
-    }
-
-    if (order.getPrice() <= 0) {
-        return false;
-    }
-
-    return true;
-    
-    } 
-    // easier to read the business rules (10/09/26) and will refactor it later...
 }
 
 //business rules checker
