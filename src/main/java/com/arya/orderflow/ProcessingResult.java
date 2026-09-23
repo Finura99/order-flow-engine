@@ -29,6 +29,8 @@ public class ProcessingResult {
         return message;
     }
 
+    // variable/fields, constructor for those variables, method for behaviours = object thts used elsewhere...
+
     @Override
     public String toString() {
         return "ProcessingResult{" +

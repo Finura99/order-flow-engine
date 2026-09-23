@@ -13,7 +13,9 @@ public class OrderValidator {
     // }
 
     public List<String> getValidationErrors(Order order) {
-        List<String> errors = new ArrayList<>();
+        List<String> errors = new ArrayList<>(); //  creates a List of string object whenever called
+        // can this be called in another class ?
+
 
         if (order.getQuantity() <= 0) {
             errors.add("Quantity must be positive");
@@ -33,9 +35,9 @@ public class OrderValidator {
 
     public boolean isValid(Order order) {
         return getValidationErrors(order).isEmpty();
-        //Checks if the lsit contains zero items
+        //Checks if the list contains zero items
     }
 }
 
-//business rules checker
+//instead of merely: true/ false, the users knows why the validation would fail
 
