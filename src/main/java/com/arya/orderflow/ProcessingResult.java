@@ -1,7 +1,7 @@
 package com.arya.orderflow;
 
 public class ProcessingResult {
-    private final int orderId;
+    private final int orderId; //create a public method especially when the variable is private
     private final boolean successful;
     private final OrderStatus finalStatus;
     private final String message;
