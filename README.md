@@ -23,3 +23,32 @@ Each class has a job:
 5. OrderProcessor = Uses the validator. Flow: recieve order -> ask validator -> if invalid -> reject order -> return failed result. if valid -> validate -> process -> fill -> return success result
 6. ProcessingResult = This is the reciept for the flow. Order is the thing being processed, this is about the outcome after processing, like fastapi but we do it manually here.
 7. For now, main is jsut the demo runner, Orchestrates and wires everything together
+
+How the system runs right now (24/09/26)
+
+Main
+│
+├── creates OrderValidator
+│
+├── gives validator to OrderProcessor
+│
+└── creates Order
+       │
+       ▼
+OrderProcessor
+│
+├── receives Order
+│
+├── asks its validator dependency to validate it
+│        │
+│        ▼
+│   OrderValidator
+│        │
+│        └── returns List<String>
+│
+├── changes Order status
+│
+└── creates ProcessingResult
+         │
+         ▼
+       Main

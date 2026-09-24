@@ -6,7 +6,7 @@ public class OrderProcessor {
 
     public OrderProcessor(OrderValidator validator) {
         this.validator = validator;
-    }
+    } // composition ? 
 
     public ProcessingResult process(Order order) {
         // Do work, this time, return a processingResult object
