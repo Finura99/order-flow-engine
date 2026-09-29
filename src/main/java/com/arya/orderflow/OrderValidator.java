@@ -5,13 +5,6 @@ import java.util.List;
 
 public class OrderValidator {
 
-    // public boolean isValid(Order order) {
-    //     return order.getQuantity() > 0 
-    //     && !order.getSymbol().isBlank()
-    //     && order.getPrice() > 0;
-    // // whole thing here is a method
-    // }
-
     public List<String> getValidationErrors(Order order) {
         List<String> errors = new ArrayList<>(); //  creates a List of string object whenever called
         // can this be called in another class ?
