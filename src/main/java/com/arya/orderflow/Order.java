@@ -72,7 +72,7 @@ public class Order {
 
     public void markFilled() {
         this.status = OrderStatus.FILLED;
-    } 
+    }
     
 
     public void markRejected() {

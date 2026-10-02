@@ -17,15 +17,15 @@ public class ProcessingResult {
         return orderId;
     }
 
-    public boolean successful() {
+    public boolean isSuccessful() {
         return successful;
     }
 
-    public OrderStatus finalStatus() {
+    public OrderStatus getFinalStatus() {
         return finalStatus;
     }
 
-    public String messege() {
+    public String getMessege() {
         return message;
     }
 

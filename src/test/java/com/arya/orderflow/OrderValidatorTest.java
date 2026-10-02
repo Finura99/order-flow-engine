@@ -102,7 +102,8 @@ public class OrderValidatorTest {
 
         Order order = new Order(
             5, 
-            "", OrderSide.BUY, 
+            "", 
+            OrderSide.BUY, 
             -10, 
             0
         );

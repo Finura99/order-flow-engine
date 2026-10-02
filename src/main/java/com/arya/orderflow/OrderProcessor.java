@@ -1,5 +1,6 @@
 package com.arya.orderflow;
 
+import java.util.ArrayList;
 import java.util.List;
 public class OrderProcessor {
     private final OrderValidator validator;
@@ -37,5 +38,18 @@ public class OrderProcessor {
                 order.getStatus(),
                 "Order processed successfully"
         );
+    }
+
+    public List<ProcessingResult> processAll(List<Order> orders) {
+        List<ProcessingResult> results = new ArrayList<>(); // empty output list
+
+        // method named processAll that takes in a list of orders and returns a list of ProcessingResults
+
+        for (Order order : orders) {
+            System.out.println(order);
+            results.add(process(order)); // process one order (validating them)
+        }
+        
+        return results; // returns one ProcessingResult
     }
 }
