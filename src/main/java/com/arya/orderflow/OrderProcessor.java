@@ -57,5 +57,6 @@ public class OrderProcessor {
         }
         
         return results; // returns one ProcessingResult
+        // structure is access domain, input type, name , output type
     }
 }
