@@ -4,6 +4,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
@@ -59,5 +60,18 @@ public class OrderProcessorTest {
         assertEquals(OrderStatus.FILLED, results.get(2).getFinalStatus());
     }
 
-    
+    @Test
+    void orderProcessorRejectsNullOrder() {
+        OrderValidator validator = new OrderValidator();
+
+        OrderProcessor processor = new OrderProcessor(validator);
+
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> processor.process(null)
+        );
+        // lambda used here, runs this piece of code and checks that it throws the exception I named
+        // 1st param for Throws is the type of exception it expects, 2nd is what code should Juit run.
+
+    }
 }
