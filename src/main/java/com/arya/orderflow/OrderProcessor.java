@@ -53,7 +53,8 @@ public class OrderProcessor {
 
         for (Order order : orders) {
             System.out.println(order);
-            results.add(process(order)); // process one order (validating them)
+            results.add(process(order)); 
+            // process one order and add it in the results List (validating them)
         }
         
         return results; // returns one ProcessingResult
