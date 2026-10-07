@@ -15,9 +15,8 @@ public class OrderProcessor {
 
 
 
+    // methods
 
-
-    
     public OrderProcessor(OrderValidator validator) {
         this.validator = validator;
     } // constructor dependency injection
