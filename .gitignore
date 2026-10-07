@@ -2,14 +2,10 @@
 *.class
 
 # Build Folders
+build/
 out/
 target/
-build/
 
 # IDE files
 .vscode/
 .idea/
-
-
-
-

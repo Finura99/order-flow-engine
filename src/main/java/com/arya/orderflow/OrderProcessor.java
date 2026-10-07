@@ -2,9 +2,22 @@ package com.arya.orderflow;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+
 public class OrderProcessor {
     private final OrderValidator validator;
 
+
+    private final ExecutorService executor = Executors.newFixedThreadPool(3);
+    // creates a pool with exactly 3 worker threads
+
+
+
+
+
+    
     public OrderProcessor(OrderValidator validator) {
         this.validator = validator;
     } // constructor dependency injection
