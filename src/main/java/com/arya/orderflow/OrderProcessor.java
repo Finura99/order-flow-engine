@@ -17,6 +17,8 @@ public class OrderProcessor {
 
     // methods
 
+
+
     public OrderProcessor(OrderValidator validator) {
         this.validator = validator;
     } // constructor dependency injection
@@ -72,4 +74,11 @@ public class OrderProcessor {
         return results; // returns one ProcessingResult
         // structure is access domain, input type, name , output type
     }
+
+
+    public void submitOrder(Order order) {
+        executor.submit(() -> process(order));
+    }
+
+
 }
