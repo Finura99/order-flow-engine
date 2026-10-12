@@ -33,9 +33,11 @@ public class OrderProcessor {
         } // check null
 
         List<String> validationErrors = validator.getValidationErrors(order);
+        // Validate once - get list of errors
 
-        if (!validator.isValid(order)) {
-            order.markRejected(); // state of the order
+        if (!validationErrors.isEmpty()) { // if lsit has something, reject
+            order.markRejected(); 
+            // state of the order
 
             return new ProcessingResult(
                     order.getId(),
@@ -66,12 +68,13 @@ public class OrderProcessor {
         // method named processAll that takes in a list of orders and returns a list of ProcessingResults
 
         for (Order order : orders) {
-            System.out.println(order);
+            // System.out.println(order);
+
             results.add(process(order)); 
             // process one order and add it in the results List (validating them)
         }
         
-        return results; // returns one ProcessingResult
+        return results; // returns full list of Processing Results
         // structure is access domain, input type, name , output type
     }
 
