@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class OrderFlowApplication {
     public static void main(String[] args){
         SpringApplication.run(OrderFlowApplication.class, args);
+        // boots spring, creates the appcontext, appcontext = Ioc container
 
     }
 // creates the Ioc container/ spring container to manage lifecycle of objects(beans)
