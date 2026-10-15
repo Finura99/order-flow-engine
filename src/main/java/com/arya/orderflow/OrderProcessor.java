@@ -2,8 +2,11 @@ package com.arya.orderflow;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
 
 
 public class OrderProcessor {
@@ -12,6 +15,8 @@ public class OrderProcessor {
 
     private final ExecutorService executor = Executors.newFixedThreadPool(3);
     // creates a pool with exactly 3 worker threads
+
+    private final BlockingQueue<Order> orderQueue = new LinkedBlockingQueue<>();
 
 
 
@@ -79,9 +84,35 @@ public class OrderProcessor {
     }
 
 
-    public void submitOrder(Order order) {
-        executor.submit(() -> process(order));
+    public Future<ProcessingResult> submitOrder (Order order) {
+        return executor.submit(() -> process(order));
+        // submit is the func the executorservice we use for work
+        // returns a future list called processing result and uses the executor (workers) submit function to process the order...
+        
     }
+    
+    //     // Order comes in
+    //     ↓
+    //     submitOrder(order)
+    //     ↓
+    // executor.submit(...)
+    //     ↓
+    // executor picks a free worker
+    //     ↓
+    // worker runs process(order)
 
+
+
+
+    public void shutdown() {
+        executor.shutdown();
+    }
+    // close the worker threads being used
+
+    public void enqueueOrder(Order order) throws InterruptedException {
+
+        orderQueue.put(order);
+        
+    }
 
 }

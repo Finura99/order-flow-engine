@@ -1,6 +1,7 @@
 package com.arya.orderflow;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -74,4 +75,36 @@ public class OrderProcessorTest {
         // 1st param for Throws is the type of exception it expects, 2nd is what code should Juit run.
 
     }
+
+    @Test
+    void orderProcessorReturnsProcessingResult() throws Exception {
+        
+        OrderValidator validator = new OrderValidator();
+
+        OrderProcessor processor = new OrderProcessor(validator);
+
+        Order order = new Order(
+            1,
+            "AAPL",
+            OrderSide.BUY,
+            10,
+            150.60
+        );
+
+        Future<ProcessingResult> future = processor.submitOrder(order);
+
+        ProcessingResult result = future.get();
+
+        
+        assertTrue(result.isSuccessful());
+        assertEquals(OrderStatus.FILLED, 
+                    result.getFinalStatus());
+            
+        
+        processor.shutdown();
+    }
+    // wait for the worker to finish then actually give me the actual reciept;
+    
+
+
 }
