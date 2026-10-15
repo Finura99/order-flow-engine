@@ -80,7 +80,6 @@ public class OrderProcessorTest {
     void orderProcessorReturnsProcessingResult() throws Exception {
         
         OrderValidator validator = new OrderValidator();
-
         OrderProcessor processor = new OrderProcessor(validator);
 
         Order order = new Order(
@@ -105,6 +104,26 @@ public class OrderProcessorTest {
     }
     // wait for the worker to finish then actually give me the actual reciept;
     
+    @Test
+    void workerProcessQueuedOrder() throws Exception {
+        
+        OrderValidator validator = new OrderValidator();
+        OrderProcessor processor = new OrderProcessor(validator); 
+        
+        Order order = new Order(1, "AAPL", OrderSide.BUY, 10, 102.20);
+        // Arrange
+
+        processor.startWorker();
+        processor.enqueueOrder(order); 
+        Thread.sleep(100);
+        // Act
+        
+        assertEquals(OrderStatus.FILLED, order.getStatus());
+        // Arrange
+
+        processor.shutdown();
+
+    }
 
 
 }

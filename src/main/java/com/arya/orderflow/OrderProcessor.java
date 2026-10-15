@@ -19,10 +19,7 @@ public class OrderProcessor {
     private final BlockingQueue<Order> orderQueue = new LinkedBlockingQueue<>();
 
 
-
     // methods
-
-
 
     public OrderProcessor(OrderValidator validator) {
         this.validator = validator;
@@ -40,7 +37,7 @@ public class OrderProcessor {
         List<String> validationErrors = validator.getValidationErrors(order);
         // Validate once - get list of errors
 
-        if (!validationErrors.isEmpty()) { // if lsit has something, reject
+        if (!validationErrors.isEmpty()) { // if list has something, reject
             order.markRejected(); 
             // state of the order
 
@@ -101,18 +98,82 @@ public class OrderProcessor {
     //     ↓
     // worker runs process(order)
 
-
-
-
-    public void shutdown() {
-        executor.shutdown();
-    }
-    // close the worker threads being used
-
+    
     public void enqueueOrder(Order order) throws InterruptedException {
-
+        
         orderQueue.put(order);
         
+        // puts orders IN the blocking queue
+        
     }
+
+    
+    public Order takeNextOrder(Order order) throws InterruptedException {
+        
+        return orderQueue.take();
+        
+        // takes next order OUT of the queue
+        
+    }
+    
+    public void startWorker() {
+        executor.submit(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    Order order = orderQueue.take(); 
+                    // if orderqueue is empty, it will stop the worker and we throw an exception
+                    
+                    process(order); // business logic / heart
+                    
+                    // wakes when order arrives, processes it, goes back to waiting
+                    
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    // "okay i was interrupted while waiting, mark me as interrupted again"
+                }
+            }
+        });
+        
+        // we give executor a long runnning job, that job keeps looping, wait for next order
+        // process it, go back and wait again.
+        // not interrupted = keep working, interrupted = someone has asked this thread to stop
+    }
+
+
+    
+    public void shutdown() {
+        executor.shutdownNow();
+        // interrupts worker thread
+        // InterruptedException gets caught
+        // worker stops
+    }
+
+
+
+    // close the worker threads being used
+    // lifecycle of the workers
+    //     startWorker()
+    //     ↓
+    // worker waits for Orders
+    //     ↓
+    // Order arrives
+    //     ↓
+    // worker processes it
+    //     ↓
+    // worker waits again
+    //     ↓
+    // shutdown()
+    //     ↓
+    // shutdownNow()
+    //     ↓
+    // worker gets interrupted
+    //     ↓
+    // InterruptedException caught
+    //     ↓
+    // interrupt flag restored
+    //     ↓
+    // while condition becomes false
+    // ↓
+    // worker exits
 
 }
