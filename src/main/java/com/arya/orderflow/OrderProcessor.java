@@ -1,5 +1,7 @@
 package com.arya.orderflow;
 
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -9,7 +11,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
+@Service
 public class OrderProcessor {
+
     private final OrderValidator validator;
 
 
@@ -46,7 +50,7 @@ public class OrderProcessor {
                     false,
                     order.getStatus(),
                     String.join(", ", validationErrors)
-            ); // return new because every order needs its own reciept...
+            ); // return new because every order needs its own receipt...
         }
 
 
@@ -83,7 +87,7 @@ public class OrderProcessor {
 
     public Future<ProcessingResult> submitOrder (Order order) {
         return executor.submit(() -> process(order));
-        // submit is the func the executorservice we use for work
+        // submit is the func the executor service we use for work
         // returns a future list called processing result and uses the executor (workers) submit function to process the order...
         
     }
@@ -121,7 +125,7 @@ public class OrderProcessor {
             while (!Thread.currentThread().isInterrupted()) {
                 try {
                     Order order = orderQueue.take(); 
-                    // if orderqueue is empty, it will stop the worker and we throw an exception
+                    // if order queue is empty, it will stop the worker and we throw an exception
                     
                     process(order); // business logic / heart
                     
@@ -129,12 +133,12 @@ public class OrderProcessor {
                     
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    // "okay i was interrupted while waiting, mark me as interrupted again"
+                    // "okay I was interrupted while waiting, mark me as interrupted again"
                 }
             }
         });
         
-        // we give executor a long runnning job, that job keeps looping, wait for next order
+        // we give executor a long-running job, that job keeps looping, wait for next order
         // process it, go back and wait again.
         // not interrupted = keep working, interrupted = someone has asked this thread to stop
     }

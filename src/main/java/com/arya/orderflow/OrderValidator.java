@@ -1,8 +1,13 @@
 package com.arya.orderflow;
 
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Component
 public class OrderValidator {
 
     public List<String> getValidationErrors(Order order) {

@@ -6,11 +6,11 @@ public class ProcessingResult {
     private final OrderStatus finalStatus;
     private final String message;
 
-    public ProcessingResult(int orderId, boolean successful, OrderStatus finalStatus, String messege) {
+    public ProcessingResult(int orderId, boolean successful, OrderStatus finalStatus, String message) {
         this.orderId = orderId;
         this.successful = successful;
         this.finalStatus = finalStatus;
-        this.message = messege;
+        this.message = message;
     }
 
     public int getOrderId() {
@@ -25,7 +25,7 @@ public class ProcessingResult {
         return finalStatus;
     }
 
-    public String getMessege() {
+    public String getMessage() {
         return message;
     }
 
@@ -41,5 +41,5 @@ public class ProcessingResult {
                 '}';
     }
 
-    // not the order itself, its the reciept
+    // not the order itself, it's the receipt
 }
