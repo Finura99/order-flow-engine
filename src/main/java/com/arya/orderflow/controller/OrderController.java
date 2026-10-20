@@ -1,12 +1,11 @@
-package com.arya.orderflow;
+package com.arya.orderflow.controller;
 
 
+import com.arya.orderflow.domain.Order;
+import com.arya.orderflow.service.OrderProcessor;
+import com.arya.orderflow.domain.ProcessingResult;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -40,6 +39,18 @@ public class OrderController {
         return ResponseEntity.badRequest().body(result);
 
         // HTTP status + ProcessingResult body
+    }
+
+    @GetMapping("/orders/{id}")
+    public String getOrderById(@PathVariable int id) {
+        //Path var means take the url path and bind it to the above java param
+
+        return "Requested Order: " + id;
+    }
+
+    @GetMapping("/orders")
+    public String getOrderStatus(@RequestParam String status) {
+        return "Requested Status: " + status;
     }
 
 }

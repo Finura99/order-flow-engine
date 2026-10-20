@@ -1,6 +1,6 @@
-package com.arya.orderflow;
+package com.arya.orderflow.domain;
 
-public class Order { 
+public class Order {
 // // This class is public so it can be used by other parts of the application.
 
     private final int id;

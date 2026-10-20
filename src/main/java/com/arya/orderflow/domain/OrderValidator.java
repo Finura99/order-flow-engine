@@ -1,7 +1,6 @@
-package com.arya.orderflow;
+package com.arya.orderflow.domain;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;

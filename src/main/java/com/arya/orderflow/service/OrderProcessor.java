@@ -1,5 +1,8 @@
-package com.arya.orderflow;
+package com.arya.orderflow.service;
 
+import com.arya.orderflow.domain.Order;
+import com.arya.orderflow.domain.OrderValidator;
+import com.arya.orderflow.domain.ProcessingResult;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,9 +37,13 @@ public class OrderProcessor {
         // Do work, this time, return a processingResult object
         // changed from void to ProcessingResult
 
+
+
         if (order == null) {
             throw new IllegalArgumentException("Order must not be null");
         } // check null
+
+
 
         List<String> validationErrors = validator.getValidationErrors(order);
         // Validate once - get list of errors

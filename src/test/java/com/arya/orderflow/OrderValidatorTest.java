@@ -3,6 +3,10 @@ package com.arya.orderflow;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import com.arya.orderflow.domain.Order;
+import com.arya.orderflow.domain.OrderSide;
+import com.arya.orderflow.domain.OrderValidator;
 import org.junit.jupiter.api.Test;
 
 public class OrderValidatorTest {

@@ -1,4 +1,4 @@
-package com.arya.orderflow;
+package com.arya.orderflow.domain;
 
 public enum OrderStatus {
     RECEIVED,

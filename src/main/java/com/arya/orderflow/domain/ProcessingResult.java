@@ -1,4 +1,4 @@
-package com.arya.orderflow;
+package com.arya.orderflow.domain;
 
 public class ProcessingResult {
     private final int orderId; //create a public method especially when the variable is private
