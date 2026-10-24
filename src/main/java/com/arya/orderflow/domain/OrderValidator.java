@@ -11,7 +11,7 @@ public class OrderValidator {
 
     public List<String> getValidationErrors(Order order) {
         List<String> errors = new ArrayList<>(); //  creates a List of string object whenever called
-        // can this be called in another class ?
+
 
 
         if (order.getQuantity() <= 0) {

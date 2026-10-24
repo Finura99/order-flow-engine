@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.arya.orderflow.domain.*;
+import com.arya.orderflow.repository.InMemoryRepository;
 import com.arya.orderflow.service.OrderProcessor;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,8 @@ public class OrderProcessorTest {
     void orderProcessorReturnsSuccessfulResult() {
         OrderValidator validator = new OrderValidator();
 
-        OrderProcessor processor = new OrderProcessor(validator);
+        InMemoryRepository repository = new InMemoryRepository();
+        OrderProcessor processor = new OrderProcessor(validator, repository);
 
         Order order = new Order(1, "AAPL", OrderSide.BUY, 10, 190.2);
 
@@ -34,8 +36,9 @@ public class OrderProcessorTest {
     @Test
     void orderProcessorReturnsUnsuccessfulResult() {
         OrderValidator validator = new OrderValidator();
+        InMemoryRepository repository = new InMemoryRepository();
 
-        OrderProcessor processor = new OrderProcessor(validator);
+        OrderProcessor processor = new OrderProcessor(validator, repository);
 
         Order order = new Order(2, "AAPL",OrderSide.BUY, 20, -100);
 
@@ -48,8 +51,9 @@ public class OrderProcessorTest {
     @Test
     void orderProcessorReturnsThreeResults() {
         OrderValidator validator = new OrderValidator();
+        InMemoryRepository repository = new InMemoryRepository();
 
-        OrderProcessor processor = new OrderProcessor(validator); // dependent on validator
+        OrderProcessor processor = new OrderProcessor(validator, repository); // dependent on validator
 
         Order order1 = new Order(3, "AAPL",OrderSide.BUY, 10, 100);
         Order order2 = new Order(4, "MSFT", OrderSide.BUY, 30, -590.2);
@@ -69,8 +73,9 @@ public class OrderProcessorTest {
     @Test
     void orderProcessorRejectsNullOrder() {
         OrderValidator validator = new OrderValidator();
+        InMemoryRepository repository = new InMemoryRepository();
 
-        OrderProcessor processor = new OrderProcessor(validator);
+        OrderProcessor processor = new OrderProcessor(validator, repository);
 
         assertThrows(
             IllegalArgumentException.class,
@@ -85,7 +90,9 @@ public class OrderProcessorTest {
     void orderProcessorReturnsProcessingResult() throws Exception {
         
         OrderValidator validator = new OrderValidator();
-        OrderProcessor processor = new OrderProcessor(validator);
+        InMemoryRepository repository = new InMemoryRepository();
+
+        OrderProcessor processor = new OrderProcessor(validator, repository);
 
         Order order = new Order(
             1,
@@ -113,7 +120,9 @@ public class OrderProcessorTest {
     void workerProcessQueuedOrder() throws Exception {
         
         OrderValidator validator = new OrderValidator();
-        OrderProcessor processor = new OrderProcessor(validator); 
+        InMemoryRepository repository = new InMemoryRepository();
+
+        OrderProcessor processor = new OrderProcessor(validator, repository);
         
         Order order = new Order(1, "AAPL", OrderSide.BUY, 10, 102.20);
         // Arrange
@@ -130,5 +139,22 @@ public class OrderProcessorTest {
 
     }
 
+    @Test
+    void processOrderIsSavedInRepo() {
+            OrderValidator validator = new OrderValidator();
+            InMemoryRepository repository = new InMemoryRepository();
 
+            OrderProcessor processor =
+                    new OrderProcessor(validator, repository);
+
+            Order order =
+                    new Order(1, "AAPL", OrderSide.BUY, 10, 150.60);
+
+            processor.process(order);
+
+            Order savedOrder = repository.findById(1);
+
+            assertEquals(order, savedOrder);
+
+    }
 }

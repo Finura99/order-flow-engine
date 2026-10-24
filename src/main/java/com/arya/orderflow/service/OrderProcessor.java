@@ -3,6 +3,7 @@ package com.arya.orderflow.service;
 import com.arya.orderflow.domain.Order;
 import com.arya.orderflow.domain.OrderValidator;
 import com.arya.orderflow.domain.ProcessingResult;
+import com.arya.orderflow.repository.InMemoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,12 +13,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import com.arya.orderflow.repository.InMemoryRepository;
 
 
 @Service
 public class OrderProcessor {
 
     private final OrderValidator validator;
+    private final InMemoryRepository repository;
 
 
     private final ExecutorService executor = Executors.newFixedThreadPool(3);
@@ -28,8 +31,9 @@ public class OrderProcessor {
 
     // methods
 
-    public OrderProcessor(OrderValidator validator) {
+    public OrderProcessor(OrderValidator validator, InMemoryRepository repository) {
         this.validator = validator;
+        this.repository = repository;
     } // constructor dependency injection
     // constructor is a door for dependencies
 
@@ -66,6 +70,8 @@ public class OrderProcessor {
         order.markValidated();
         order.markProcessing();
         order.markFilled();
+
+        repository.save(order);
 
         return new ProcessingResult(
                 order.getId(),
