@@ -28,11 +28,11 @@ How the system runs right now (24/09/26)
 
 Main
 │
-├── creates OrderValidator
+├── *creates OrderValidator*
 │
 ├── gives validator to OrderProcessor
 │
-└── creates Order
+└── *creates Order*
        │
        ▼
 OrderProcessor

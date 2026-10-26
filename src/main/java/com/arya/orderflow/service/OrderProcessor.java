@@ -1,6 +1,7 @@
 package com.arya.orderflow.service;
 
 import com.arya.orderflow.domain.Order;
+import com.arya.orderflow.domain.OrderStatus;
 import com.arya.orderflow.domain.OrderValidator;
 import com.arya.orderflow.domain.ProcessingResult;
 import com.arya.orderflow.repository.InMemoryRepository;
@@ -40,8 +41,6 @@ public class OrderProcessor {
     public ProcessingResult process(Order order) {
         // Do work, this time, return a processingResult object
         // changed from void to ProcessingResult
-
-
 
         if (order == null) {
             throw new IllegalArgumentException("Order must not be null");
@@ -192,5 +191,17 @@ public class OrderProcessor {
     // while condition becomes false
     // ↓
     // worker exits
+
+
+  public Order findOrderId(int id) {
+      return repository.findById(id);
+      // service layer delegates the responsibility to repo...
+      // retrieve order from repo by id
+  }
+
+  public List<Order> findOrderStatus(OrderStatus status) {
+        return repository.findByOrderStatus(status);
+        // delegated to repo layer
+  }
 
 }

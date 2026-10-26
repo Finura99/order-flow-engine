@@ -2,10 +2,13 @@ package com.arya.orderflow.controller;
 
 
 import com.arya.orderflow.domain.Order;
+import com.arya.orderflow.domain.OrderStatus;
 import com.arya.orderflow.service.OrderProcessor;
 import com.arya.orderflow.domain.ProcessingResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -40,21 +43,36 @@ public class OrderController {
 
         // HTTP status + ProcessingResult body
     }
+    
 
     @GetMapping("/orders/{id}")
-    public String getOrderById(@PathVariable int id) {
+    public ResponseEntity<Order> orderId(@PathVariable int id) {
         //Path var means take the url path and bind it to the above java param
 
-        return "Requested Order: " + id;
+        Order storedOrder = processor.findOrderId(id);
+        // asks/calls the service layer
+
+        if (storedOrder == null) {
+            return ResponseEntity.notFound().build();
+        }
+        // order missing would give back 404 error
+
+        return ResponseEntity.ok(storedOrder);
+        // 200 + JSON Body
+
     }
 
     @GetMapping("/orders")
-    public String getOrderStatus(@RequestParam String status) {
-        return "Requested Status: " + status;
+    public ResponseEntity<List<Order>> getOrderStatus(@RequestParam OrderStatus status) {
+
+        List<Order> orderStatusList = processor.findOrderStatus(status);
+
+        return ResponseEntity.ok(orderStatusList);
+
     }
 
-}
 
+}
 
 
 
