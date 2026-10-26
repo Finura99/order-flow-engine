@@ -62,21 +62,21 @@ public class OrderController {
 
     }
 
+    // route path
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> getOrderStatus(@RequestParam OrderStatus status) {
+        // ?status=FILLED is the query param
 
         List<Order> orderStatusList = processor.findOrderStatus(status);
 
         return ResponseEntity.ok(orderStatusList);
 
     }
-
-
 }
 
 
 
 // Rest controller tells spring that this handles HTTP requests
-// get mapping is the specific annotation to the method
+// get/post/put mapping is the specific annotation to the method
 // public string health is the controller method
 // return is the response body
