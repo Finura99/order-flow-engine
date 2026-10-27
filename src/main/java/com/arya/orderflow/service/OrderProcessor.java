@@ -5,6 +5,7 @@ import com.arya.orderflow.domain.OrderStatus;
 import com.arya.orderflow.domain.OrderValidator;
 import com.arya.orderflow.domain.ProcessingResult;
 import com.arya.orderflow.repository.InMemoryRepository;
+import com.arya.orderflow.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,14 +15,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
-import com.arya.orderflow.repository.InMemoryRepository;
+
 
 
 @Service
 public class OrderProcessor {
 
     private final OrderValidator validator;
-    private final InMemoryRepository repository;
+    private final OrderRepository repository;
 
 
     private final ExecutorService executor = Executors.newFixedThreadPool(3);
@@ -32,7 +33,7 @@ public class OrderProcessor {
 
     // methods
 
-    public OrderProcessor(OrderValidator validator, InMemoryRepository repository) {
+    public OrderProcessor(OrderValidator validator, OrderRepository repository) {
         this.validator = validator;
         this.repository = repository;
     } // constructor dependency injection
@@ -194,13 +195,14 @@ public class OrderProcessor {
 
 
   public Order findOrderId(int id) {
-      return repository.findById(id);
+      return repository.findById(id).orElse(null);
       // service layer delegates the responsibility to repo...
       // retrieve order from repo by id
+      // Jpa expects an optional here but to abide by controller contract we return order or null...
   }
 
   public List<Order> findOrderStatus(OrderStatus status) {
-        return repository.findByOrderStatus(status);
+        return repository.findByStatus(status);
         // delegated to repo layer
   }
 

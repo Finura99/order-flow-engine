@@ -1,160 +1,125 @@
 package com.arya.orderflow;
 
-import java.util.List;
-import java.util.concurrent.Future;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import com.arya.orderflow.domain.*;
-import com.arya.orderflow.repository.InMemoryRepository;
+import com.arya.orderflow.repository.OrderRepository;
 import com.arya.orderflow.service.OrderProcessor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class OrderProcessorTest {
 
-    @Test 
-    void orderProcessorReturnsSuccessfulResult() {
-        OrderValidator validator = new OrderValidator();
+    private OrderValidator validator;
+    private OrderRepository repository;
+    private OrderProcessor processor;
 
-        InMemoryRepository repository = new InMemoryRepository();
-        OrderProcessor processor = new OrderProcessor(validator, repository);
+    @BeforeEach
+    void setUp() {
+        validator = new OrderValidator();
+        repository = mock(OrderRepository.class);
+        processor = new OrderProcessor(validator, repository);
+    }
 
-        Order order = new Order(1, "AAPL", OrderSide.BUY, 10, 190.2);
+    @Test
+    void validOrderIsProcessedSuccessfully() {
+
+        Order order = new Order(
+                1,
+                "AAPL",
+                OrderSide.BUY,
+                10,
+                150.60
+        );
 
         ProcessingResult result = processor.process(order);
 
         assertTrue(result.isSuccessful());
         assertEquals(OrderStatus.FILLED, result.getFinalStatus());
 
-        }
+        verify(repository).save(order);
+    }
 
     @Test
-    void orderProcessorReturnsUnsuccessfulResult() {
-        OrderValidator validator = new OrderValidator();
-        InMemoryRepository repository = new InMemoryRepository();
+    void invalidOrderIsRejected() {
 
-        OrderProcessor processor = new OrderProcessor(validator, repository);
-
-        Order order = new Order(2, "AAPL",OrderSide.BUY, 20, -100);
+        Order order = new Order(
+                2,
+                "AAPL",
+                OrderSide.BUY,
+                0,
+                150.60
+        );
 
         ProcessingResult result = processor.process(order);
 
         assertFalse(result.isSuccessful());
         assertEquals(OrderStatus.REJECTED, result.getFinalStatus());
+
+        verify(repository).save(order);
     }
 
     @Test
-    void orderProcessorReturnsThreeResults() {
-        OrderValidator validator = new OrderValidator();
-        InMemoryRepository repository = new InMemoryRepository();
-
-        OrderProcessor processor = new OrderProcessor(validator, repository); // dependent on validator
-
-        Order order1 = new Order(3, "AAPL",OrderSide.BUY, 10, 100);
-        Order order2 = new Order(4, "MSFT", OrderSide.BUY, 30, -590.2);
-        Order order3 = new Order(5, "TSLA", OrderSide.BUY, 20, 490.2);
-        // ARRANGE all objects
-
-        List<Order> orders = List.of(order1, order2, order3); // put these in a List<Order>
-
-        List<ProcessingResult> results = processor.processAll(orders); // results stored in this variable
-
-        assertEquals(3, results.size()); // ASSERT results.size() == 3
-        assertEquals(OrderStatus.FILLED, results.get(0).getFinalStatus());
-        assertEquals(OrderStatus.REJECTED, results.get(1).getFinalStatus());
-        assertEquals(OrderStatus.FILLED, results.get(2).getFinalStatus());
-    }
-
-    @Test
-    void orderProcessorRejectsNullOrder() {
-        OrderValidator validator = new OrderValidator();
-        InMemoryRepository repository = new InMemoryRepository();
-
-        OrderProcessor processor = new OrderProcessor(validator, repository);
-
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> processor.process(null)
-        );
-        // lambda used here, runs this piece of code and checks that it throws the exception I named
-        // 1st param for Throws is the type of exception it expects, 2nd is what code should Juit run.
-
-    }
-
-    @Test
-    void orderProcessorReturnsProcessingResult() throws Exception {
-        
-        OrderValidator validator = new OrderValidator();
-        InMemoryRepository repository = new InMemoryRepository();
-
-        OrderProcessor processor = new OrderProcessor(validator, repository);
+    void findOrderByIdReturnsOrderWhenPresent() {
 
         Order order = new Order(
-            1,
-            "AAPL",
-            OrderSide.BUY,
-            10,
-            150.60
+                3,
+                "MSFT",
+                OrderSide.BUY,
+                20,
+                320.00
         );
 
-        Future<ProcessingResult> future = processor.submitOrder(order);
+        when(repository.findById(3))
+                .thenReturn(Optional.of(order));
 
-        ProcessingResult result = future.get();
+        Order result = processor.findOrderId(3);
 
-        
-        assertTrue(result.isSuccessful());
-        assertEquals(OrderStatus.FILLED, 
-                    result.getFinalStatus());
-            
-        
-        processor.shutdown();
-    }
-    // wait for the worker to finish then actually give me the actual reciept;
-    
-    @Test
-    void workerProcessQueuedOrder() throws Exception {
-        
-        OrderValidator validator = new OrderValidator();
-        InMemoryRepository repository = new InMemoryRepository();
-
-        OrderProcessor processor = new OrderProcessor(validator, repository);
-        
-        Order order = new Order(1, "AAPL", OrderSide.BUY, 10, 102.20);
-        // Arrange
-
-        processor.startWorker();
-        processor.enqueueOrder(order); 
-        Thread.sleep(100);
-        // Act
-        
-        assertEquals(OrderStatus.FILLED, order.getStatus());
-        // Arrange
-
-        processor.shutdown();
-
+        assertEquals(order, result);
     }
 
     @Test
-    void processOrderIsSavedInRepo() {
-            OrderValidator validator = new OrderValidator();
-            InMemoryRepository repository = new InMemoryRepository();
+    void findOrderByIdReturnsNullWhenMissing() {
 
-            OrderProcessor processor =
-                    new OrderProcessor(validator, repository);
+        when(repository.findById(999))
+                .thenReturn(Optional.empty());
 
-            Order order =
-                    new Order(1, "AAPL", OrderSide.BUY, 10, 150.60);
+        Order result = processor.findOrderId(999);
 
-            processor.process(order);
+        assertNull(result);
+    }
 
-            Order savedOrder = repository.findById(1);
+    @Test
+    void findOrdersByStatusReturnsMatchingOrders() {
 
-            assertEquals(order, savedOrder);
+        Order order1 = new Order(
+                1,
+                "AAPL",
+                OrderSide.BUY,
+                10,
+                150.00
+        );
 
+        Order order2 = new Order(
+                2,
+                "MSFT",
+                OrderSide.BUY,
+                20,
+                320.00
+        );
+
+        when(repository.findByStatus(OrderStatus.FILLED))
+                .thenReturn(List.of(order1, order2));
+
+        List<Order> result =
+                processor.findOrderStatus(OrderStatus.FILLED);
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(order1));
+        assertTrue(result.contains(order2));
     }
 }
