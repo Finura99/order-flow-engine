@@ -58,9 +58,13 @@ public class OrderProcessorTest {
         ProcessingResult result = processor.process(order);
 
         assertFalse(result.isSuccessful());
+        // returns boolean false which passes the assertion
+
         assertEquals(OrderStatus.REJECTED, result.getFinalStatus());
+        // expected, actual
 
         verify(repository).save(order);
+
     }
 
     @Test

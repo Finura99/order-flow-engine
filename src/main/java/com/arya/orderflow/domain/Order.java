@@ -3,8 +3,12 @@ package com.arya.orderflow.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 @Entity
+@Table(name = "orders")//table name is orders and java classis order (SQL has a command order, so we avoid confusion)
 public class Order {
 // // This class is public so it can be used by other parts of the application.
 
@@ -12,14 +16,20 @@ public class Order {
     private int id;
 
     private String symbol;
-    private OrderSide side;
     private int quantity;
     private double price;
     // // Using double for now while learning. In a real financial system, BigDecimal would avoid floating-point precision issues.
+
+    @Enumerated(EnumType.STRING)
+    private OrderSide side;
+
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
+
+
     protected Order() {
-        // for JPA/Hibernate
+        // for JPA/Hibernate rebuildijng from the database
     }
 
     public Order(int id, String symbol, OrderSide side, int quantity, double price){

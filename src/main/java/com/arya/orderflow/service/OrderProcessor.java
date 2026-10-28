@@ -4,7 +4,6 @@ import com.arya.orderflow.domain.Order;
 import com.arya.orderflow.domain.OrderStatus;
 import com.arya.orderflow.domain.OrderValidator;
 import com.arya.orderflow.domain.ProcessingResult;
-import com.arya.orderflow.repository.InMemoryRepository;
 import com.arya.orderflow.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +52,10 @@ public class OrderProcessor {
         // Validate once - get list of errors
 
         if (!validationErrors.isEmpty()) { // if list has something, reject
-            order.markRejected(); 
+            order.markRejected();
+            repository.save(order);
             // state of the order
+            //save it even if it rejects s we want an audit trail
 
             return new ProcessingResult(
                     order.getId(),
