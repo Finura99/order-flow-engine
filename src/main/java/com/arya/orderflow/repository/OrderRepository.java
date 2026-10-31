@@ -10,5 +10,5 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
 
     List<Order> findByStatus(OrderStatus status);
-
+// custom repository method
 }
