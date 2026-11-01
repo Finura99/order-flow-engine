@@ -29,6 +29,14 @@ public class TradingToolkitClient {
       //restclient -> http get -> append to base url -> send request and retrieve response
         //give me the response body as a String
     };
+
+    public String portfolioSymbol(String symbol) {
+        return restClient
+                .get()
+                .uri("/portfolio/{symbol}", symbol)
+                .retrieve()
+                .body(String.class);
+    }
     // this says a trading toolkit(constructor) cannot exist without a rest client
     // the builder is only needed for the construction to configure and create teh restclient obj
 
