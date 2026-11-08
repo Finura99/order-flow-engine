@@ -1,8 +1,7 @@
 package com.arya.orderflow.controller;
 
 import com.arya.orderflow.client.TradingToolkitClient;
-import com.arya.orderflow.domain.Order;
-import org.springframework.http.ResponseEntity;
+import com.arya.orderflow.dto.PortfolioResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,9 +25,9 @@ public class IntegrationController {
     }
 
     @GetMapping("/portfolio/{symbol}")
-    public String getPortfolioSymbol(@PathVariable String symbol) {
+    public PortfolioResponse getPortfolioSymbol(@PathVariable String symbol) {
         return tradingToolkitClient.portfolioSymbol(symbol);
     }
 
-
+//inbound http into java from tradingtoolkit
 }

@@ -15,4 +15,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(exception.getMessage());
         // return http 400 series
     }
+
+    
 }

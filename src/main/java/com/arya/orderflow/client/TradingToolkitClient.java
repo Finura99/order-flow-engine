@@ -1,9 +1,9 @@
 package com.arya.orderflow.client;
 
 
+import com.arya.orderflow.dto.PortfolioResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import org.springframework.stereotype.Service;
 
 
 // Outbound http client to communicate with my trading toolkit (external service)
@@ -30,16 +30,15 @@ public class TradingToolkitClient {
         //give me the response body as a String
     };
 
-    public String portfolioSymbol(String symbol) {
+    public PortfolioResponse portfolioSymbol(String symbol) {
         return restClient
                 .get()
                 .uri("/portfolio/{symbol}", symbol)
                 .retrieve()
-                .body(String.class);
+                .body(PortfolioResponse.class);
     }
     // this says a trading toolkit(constructor) cannot exist without a rest client
-    // the builder is only needed for the construction to configure and create teh restclient obj
-
-
-
+    // the builder is only needed for the construction to configure and create the restclient obj
 }
+
+//outbound HTTP from java to tradingtoolkit
