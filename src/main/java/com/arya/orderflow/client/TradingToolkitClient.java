@@ -2,8 +2,10 @@ package com.arya.orderflow.client;
 
 
 import com.arya.orderflow.dto.PortfolioResponse;
+import com.arya.orderflow.exception.PortfolioNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import com.arya.orderflow.exception.PortfolioNotFoundException;
 
 
 // Outbound http client to communicate with my trading toolkit (external service)
@@ -35,9 +37,16 @@ public class TradingToolkitClient {
                 .get()
                 .uri("/portfolio/{symbol}", symbol)
                 .retrieve()
+                .onStatus(
+                        status -> status.value() == 404,
+                        (request, response) -> {
+                            throw new PortfolioNotFoundException(
+                                    "Portfolio not found: " + symbol
+                            );
+                        }
+                )
                 .body(PortfolioResponse.class);
     }
-    // this says a trading toolkit(constructor) cannot exist without a rest client
     // the builder is only needed for the construction to configure and create the restclient obj
 }
 
