@@ -18,6 +18,7 @@ public class IntegrationController {
     public IntegrationController(TradingToolkitClient tradingToolkitClient) {
         this.tradingToolkitClient = tradingToolkitClient;
     }
+    //constructor dependency injection
 
     @GetMapping("/python-health")
     public String health() {
@@ -29,5 +30,5 @@ public class IntegrationController {
         return tradingToolkitClient.portfolioSymbol(symbol);
     }
 
-//inbound http into java from tradingtoolkit
+//inbound http from tradingtoolkit to java
 }

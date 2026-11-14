@@ -19,5 +19,7 @@ public record PortfolioResponse(
 }
 // records automatically gives you a constructor and accessors
 
-// this is when the data that comes back from our external service is converted into a domain object for this service to understand
+// this is made when the data that comes back from our external service is converted into a domain object for this service to understand
 //rather than propagating it as a string
+
+// we know the context of what it is
