@@ -31,4 +31,5 @@ public class IntegrationController {
     }
 
 //inbound http from tradingtoolkit to java
+    // response comes back from python service and is handled in this controller
 }
