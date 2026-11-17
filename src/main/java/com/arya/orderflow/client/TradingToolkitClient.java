@@ -15,7 +15,7 @@ public class TradingToolkitClient {
     private final RestClient restClient;
 
     // outbound http client
-    // final makes dependency immutable
+    // final makes dependency immutable - dep inj
 
     public TradingToolkitClient(RestClient.Builder builder) {
         this.restClient = builder.baseUrl("http://127.0.0.1:8000").build();
