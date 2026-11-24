@@ -2,6 +2,7 @@ package com.arya.orderflow.client;
 
 
 import com.arya.orderflow.dto.PortfolioResponse;
+import com.arya.orderflow.dto.PositionResponse;
 import com.arya.orderflow.exception.PortfolioNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -48,6 +49,18 @@ public class TradingToolkitClient {
                 .body(PortfolioResponse.class);
     }
     // the builder is only needed for the construction to configure and create the restclient obj
+
+    public PositionResponse[] positions() {
+        return restClient
+                .get()
+                .uri("/positions")
+                .retrieve()
+                .body(PositionResponse[].class);
+    }
+    // Python returns a JSON array, which is deserialized
+    // into an array of PositionResponse objects.
+
+
 }
 
 //outbound HTTP from java to tradingtoolkit

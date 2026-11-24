@@ -2,10 +2,8 @@ package com.arya.orderflow.controller;
 
 import com.arya.orderflow.client.TradingToolkitClient;
 import com.arya.orderflow.dto.PortfolioResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.arya.orderflow.dto.PositionResponse;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -29,6 +27,12 @@ public class IntegrationController {
     public PortfolioResponse getPortfolioSymbol(@PathVariable String symbol) {
         return tradingToolkitClient.portfolioSymbol(symbol);
     }
+
+    @GetMapping("/positions")
+    public PositionResponse[] getPositions() {
+        return tradingToolkitClient.positions();
+    }
+    // delegating the http comms to the client
 
 //inbound http from tradingtoolkit to java
     // response comes back from python service and is handled in this controller
